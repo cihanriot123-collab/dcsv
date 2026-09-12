@@ -1,0 +1,20 @@
+name: Windows Bat Runner
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run-bat:
+    runs-on: windows-latest
+
+    steps:
+      - name: Dosyalari Cek
+        uses: actions/checkout@v4
+
+      - name: Chrome Kur
+        run: |
+          choco install googlechrome -y
+
+      - name: BAT Dosyasini Calistir
+        run: |
+          cmd.exe /c bot.bat
