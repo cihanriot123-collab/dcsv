@@ -1,8 +1,9 @@
 @echo off
-title DCSV 30 Profil Otomasyonu
+title DCSV 30 Profil Otomasyonu ve Uzaktan Log
 
 cd /d "%~dp0"
 set LINK="https://dcsv.me/users/cihante"
+set /a SAYAC=0
 
 :: Chrome'un Runner üzerindeki yolu
 set CHROME="C:\Program Files\Google\Chrome\Application\chrome.exe"
@@ -10,7 +11,17 @@ if not exist %CHROME% set CHROME=chrome
 
 :dongu
 cls
-echo [%time%] === YENI DONGU BASLATILIYOR (30 PROFIL) ===
+set /a SAYAC+=1
+set /a TOPLAM_ISTEK=SAYAC*30
+
+echo ===================================================
+echo             CANLI PROFIL VE ISTEK TAKIP
+echo ===================================================
+echo [%time%] Tamamlanan Dongu Sayisi: %SAYAC%
+echo [%time%] Toplam Atilan Profil Istegi: %TOPLAM_ISTEK%
+echo Hedef URL: %LINK%
+echo ===================================================
+echo.
 
 :: --- 1. PAKET (1 - 5) ---
 echo [%time%] Paket 1/6 aciliyor (5 Pencere)...
@@ -72,7 +83,11 @@ ping 127.0.0.1 -n 9 >nul
 echo [%time%] Chrome surecleri temizleniyor (RAM bosaltiliyor)...
 taskkill /F /IM chrome.exe /T >nul 2>&1
 
-echo [%time%] Bekleniyor (15 saniye)...
+:: --- DIGER CMD EKRANINA LOG GONDERME ---
+echo [%time%] Diger PC/CMD ekranina log akitiliyor...
+curl -d "LOG: Dongu #%SAYAC% tamamlandi - Toplam Istek: %TOPLAM_ISTEK%" ntfy.sh/cihan_log_77 >nul 2>&1
+
+echo [%time%] Rate limit engeline takilmamak icin bekleniyor (15 saniye)...
 ping 127.0.0.1 -n 16 >nul
 
 goto dongu
